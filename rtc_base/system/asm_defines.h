@@ -39,11 +39,11 @@ bl _\name
 #else
 .macro GLOBAL_FUNCTION name
 .global \name
-.hidden \name
 .endm
 .macro DEFINE_FUNCTION name
 #if defined(__linux__) && defined(__ELF__)
 .type \name,%function
+.hidden \name
 #endif
 \name:
 .endm

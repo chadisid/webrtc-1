@@ -127,7 +127,7 @@ rtc_source_set("common_audio_c_arm_asm") {
   sources = []
   deps = []
   if (current_cpu == "arm") {
-    if (current_os == "winuwp" && target_os == "winuwp") {
+    if (current_os == "winuwp" && target_os == "winuwp" && !is_clang) {
       sources += get_target_outputs(":compile_common_audio_c_arm_assembly")
       deps += [
         ":compile_common_audio_c_arm_assembly",

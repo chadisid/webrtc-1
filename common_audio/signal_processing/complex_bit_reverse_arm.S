@@ -1,16 +1,16 @@
-@
-@ Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
-@
-@ Use of this source code is governed by a BSD-style license
-@ that can be found in the LICENSE file in the root of the source
-@ tree. An additional intellectual property rights grant can be found
-@ in the file PATENTS.  All contributing project authors may
-@ be found in the AUTHORS file in the root of the source tree.
-@
-
-@ This file contains the function WebRtcSpl_ComplexBitReverse(), optimized
-@ for ARMv5 platforms.
-@ Reference C code is in file complex_bit_reverse.c. Bit-exact.
+//
+// Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
+//
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file in the root of the source
+// tree. An additional intellectual property rights grant can be found
+// in the file PATENTS.  All contributing project authors may
+// be found in the AUTHORS file in the root of the source tree.
+//
+//
+// This file contains the function WebRtcSpl_ComplexBitReverse(), optimized
+// for ARMv5 platforms.
+// Reference C code is in file complex_bit_reverse.c. Bit-exact.
 
 #include "rtc_base/system/asm_defines.h"
 
@@ -20,42 +20,42 @@ DEFINE_FUNCTION WebRtcSpl_ComplexBitReverse
   push {r4-r7}
 
   cmp r1, #7
-  adr r3, index_7                 @ Table pointer.
-  mov r4, #112                    @ Number of interations.
+  adr r3, index_7                 // Table pointer.
+  mov r4, #112                    // Number of interations.
   beq PRE_LOOP_STAGES_7_OR_8
 
   cmp r1, #8
-  adr r3, index_8                 @ Table pointer.
-  mov r4, #240                    @ Number of interations.
+  adr r3, index_8                 // Table pointer.
+  mov r4, #240                    // Number of interations.
   beq PRE_LOOP_STAGES_7_OR_8
 
-  mov r3, #1                      @ Initialize m.
-  mov r1, r3, asl r1              @ n = 1 << stages;
-  subs r6, r1, #1                 @ nn = n - 1;
+  mov r3, #1                      // Initialize m.
+  mov r1, r3, asl r1              // n = 1 << stages;
+  subs r6, r1, #1                 // nn = n - 1;
   ble END
 
-  mov r5, r0                      @ &complex_data
-  mov r4, #0                      @ ml
+  mov r5, r0                      // &complex_data
+  mov r4, #0                      // ml
 
 LOOP_GENERIC:
-  rsb r12, r4, r6                 @ l > nn - mr
-  mov r2, r1                      @ n
+  rsb r12, r4, r6                 // l > nn - mr
+  mov r2, r1                      // n
 
 LOOP_SHIFT:
-  asr r2, #1                      @ l >>= 1;
+  asr r2, #1                      // l >>= 1;
   cmp r2, r12
   bgt LOOP_SHIFT
 
   sub r12, r2, #1
   and r4, r12, r4
-  add r4, r2                      @ mr = (mr & (l - 1)) + l;
-  cmp r4, r3                      @ mr <= m ?
+  add r4, r2                      // mr = (mr & (l - 1)) + l;
+  cmp r4, r3                      // mr <= m ?
   ble UPDATE_REGISTERS
 
   mov r12, r4, asl #2
-  ldr r7, [r5, #4]                @ complex_data[2 * m, 2 * m + 1].
-                                  @   Offset 4 due to m incrementing from 1.
-  ldr r2, [r0, r12]               @ complex_data[2 * mr, 2 * mr + 1].
+  ldr r7, [r5, #4]                // complex_data[2 * m, 2 * m + 1].
+                                  //   Offset 4 due to m incrementing from 1.
+  ldr r2, [r0, r12]               // complex_data[2 * mr, 2 * mr + 1].
   str r7, [r0, r12]
   str r2, [r5, #4]
 
@@ -71,10 +71,10 @@ PRE_LOOP_STAGES_7_OR_8:
   add r4, r3, r4, asl #1
 
 LOOP_STAGES_7_OR_8:
-  ldrsh r2, [r3], #2              @ index[m]
-  ldrsh r5, [r3], #2              @ index[m + 1]
-  ldr r1, [r0, r2]                @ complex_data[index[m], index[m] + 1]
-  ldr r12, [r0, r5]               @ complex_data[index[m + 1], index[m + 1] + 1]
+  ldrsh r2, [r3], #2              // index[m]
+  ldrsh r5, [r3], #2              // index[m + 1]
+  ldr r1, [r0, r2]                // complex_data[index[m], index[m] + 1]
+  ldr r12, [r0, r5]               // complex_data[index[m + 1], index[m + 1] + 1]
   cmp r3, r4
   str r1, [r0, r5]
   str r12, [r0, r2]
@@ -84,12 +84,12 @@ END:
   pop {r4-r7}
   bx lr
 
-@ The index tables. Note the values are doubles of the actual indexes for 16-bit
-@ elements, different from the generic C code. It actually provides byte offsets
-@ for the indexes.
+// The index tables. Note the values are doubles of the actual indexes for 16-bit
+// elements, different from the generic C code. It actually provides byte offsets
+// for the indexes.
 
 .align  2
-index_7:  @ Indexes for stages == 7.
+index_7:  // Indexes for stages == 7.
   .short 4, 256, 8, 128, 12, 384, 16, 64, 20, 320, 24, 192, 28, 448, 36, 288
   .short 40, 160, 44, 416, 48, 96, 52, 352, 56, 224, 60, 480, 68, 272, 72, 144
   .short 76, 400, 84, 336, 88, 208, 92, 464, 100, 304, 104, 176, 108, 432, 116
@@ -99,7 +99,7 @@ index_7:  @ Indexes for stages == 7.
   .short 388, 276, 324, 284, 452, 300, 420, 308, 356, 316, 484, 332, 404, 348
   .short 468, 364, 436, 380, 500, 412, 460, 444, 492
 
-index_8:  @ Indexes for stages == 8.
+index_8:  // Indexes for stages == 8.
   .short 4, 512, 8, 256, 12, 768, 16, 128, 20, 640, 24, 384, 28, 896, 32, 64
   .short 36, 576, 40, 320, 44, 832, 48, 192, 52, 704, 56, 448, 60, 960, 68, 544
   .short 72, 288, 76, 800, 80, 160, 84, 672, 88, 416, 92, 928, 100, 608, 104
