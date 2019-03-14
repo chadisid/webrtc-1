@@ -640,7 +640,7 @@ rtc_source_set("isac_fix_c_arm_asm") {
   sources = []
   deps = []
   if (current_cpu == "arm" && arm_version >= 7) {
-    if (current_os == "winuwp" && target_os == "winuwp") {
+    if (current_os == "winuwp" && target_os == "winuwp" && !is_clang) {
       sources += get_target_outputs(":isac_fix_c_arm_assembly")
       deps += [
         ":isac_fix_c_arm_assembly",

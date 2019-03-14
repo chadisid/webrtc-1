@@ -49,7 +49,7 @@ rtc_source_set("spl_sqrt_floor") {
   ]
   deps = []
   if (current_cpu == "arm") {
-    if (current_os == "winuwp" && target_os == "winuwp") {
+    if (current_os == "winuwp" && target_os == "winuwp" && !is_clang) {
       sources += get_target_outputs(":compile_spl_sqrt_floor_arm_assembly")
       deps = [
         ":compile_spl_sqrt_floor_arm_assembly",

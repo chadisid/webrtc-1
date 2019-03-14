@@ -10,6 +10,9 @@
 
 #include "api/audio_codecs/audio_codec_pair_id.h"
 
+//Added because some intrinsics functions, are defined in this clang-cl header. 
+#include <intrin.h>
+
 #include <atomic>
 
 #include "rtc_base/checks.h"
