@@ -56,12 +56,12 @@ bool IsThreadRefEqual(const PlatformThreadRef& a, const PlatformThreadRef& b) {
 
 #if defined(WEBRTC_WIN)
 void SetCurrentThreadNameHelper(THREADNAME_INFO threadname_info) {
-  __try {
+  //__try {
     ::RaiseException(0x406D1388, 0, sizeof(threadname_info) / sizeof(DWORD),
       reinterpret_cast<ULONG_PTR*>(&threadname_info));
-  }
-  __except (EXCEPTION_EXECUTE_HANDLER) {
-  }
+  //}
+  //__except (EXCEPTION_EXECUTE_HANDLER) {
+  //}
 }
 #endif  // WEBRTC_WIN
 
